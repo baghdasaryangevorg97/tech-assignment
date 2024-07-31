@@ -1,6 +1,7 @@
 <?php
 
-use App\Http\Controllers\user\UserController;
+use App\Http\Controllers\User\UserController;
+use App\Http\Controllers\Website\WebsiteController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -8,10 +9,24 @@ Route::get('/', function () {
 });
 
 
-Route::group(['prefix' => 'v1/auth'], function () {
-    Route::get('/register', [UserController::class, 'register']);
+Route::group(['prefix' => 'v1'], function () {
+    Route::group(['prefix' => 'auth'], function () {
+        Route::get('/register', [UserController::class, 'register']);
+    });
+
+    Route::group(['prefix' => 'websites'], function () {
+        Route::resource('/', WebsiteController::class);
+    });
+    
+    
+    
     
 });
+
+
+
+
+
 
 
 
