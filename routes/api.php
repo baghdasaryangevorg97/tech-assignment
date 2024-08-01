@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\Website\WebsiteController;
+use App\Http\Controllers\Report\ReportController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -18,6 +19,8 @@ Route::group(['prefix' => 'v1'], function () {
         Route::resource('/', WebsiteController::class);
     });
     
+
+    Route::middleware('auth:api')->get('/report', [ReportController::class, 'show']);
     
     
     
