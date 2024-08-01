@@ -4,6 +4,8 @@ namespace App\Services;
 
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Auth\AuthenticationException;
 
 class AuthService
 {
@@ -20,14 +22,15 @@ class AuthService
         return $token;
     }
 
-    public function login(array $data): object
+    public function login(array $data): object|array
     {
-        dd($data);
-        // if (Auth::attempt(['email' => $data['email'], 'password' => $data['password']])) {
-        //     $user = Auth::user();
-        //     return $user;
-        // }
+        if (Auth::attempt(['email' => $data['email'], 'password' => $data['password']])) {
+            $user = Auth::user();
+            $token = $user->createToken('auth_token')->plainTextToken;
 
-        // throw new \Exception('Invalid credentials');
+            return ['user' => $user, 'token' => $token];
+        }
+
+        throw new AuthenticationException('The provided credentials are incorrect.');
     }
 }

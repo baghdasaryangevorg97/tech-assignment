@@ -5,13 +5,15 @@ namespace App\Http\Controllers\Website;
 use App\Http\Controllers\Controller;
 use App\Models\Website;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
 
 class WebsiteController extends Controller
 {
     public function index()
     {
-        $websites = Website::all();
-        return view('links.index', compact('websites'));
+        $websites = Website::paginate(20);
+        return view('content.website.index', compact('websites'));
     }
 
     public function create()
@@ -31,8 +33,40 @@ class WebsiteController extends Controller
 
     public function show(Website $website)
     {
-        return view('links.show', compact('link'));
+        return view('content..show', compact('link'));
     }
+
+    public function showReport($id)
+    {
+        $reports = DB::table('website_reports')
+            ->select(
+                DB::raw('DATE(created_at) as date'),
+                DB::raw('SUM(revenue) as revenue'),
+                DB::raw('SUM(impressions) as impressions'),
+                DB::raw('(SUM(revenue) * 1000 / SUM(impressions)) as cpm')
+            )
+            ->where('website_id', $id)
+            ->groupBy(DB::raw('DATE(created_at)'))
+            ->get();
+
+        $totalRevenue = $reports->sum('revenue');
+        $totalImpressions = $reports->sum('impressions');
+        $totalCpm = ($totalRevenue * 1000) / $totalImpressions;
+
+        $data = $reports->keyBy('date')->toArray();
+        $data['total'] = [
+            'sum' => $totalRevenue,
+            'impressions' => $totalImpressions,
+            'cpm' => $totalCpm
+        ];
+
+        return response()->json(['data' => $data]);
+    }
+
+    // public function websites(Website $website)
+    // {
+    //     return view('links.show', compact('link'));
+    // }
 
     public function edit(Website $website)
     {

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\Website\WebsiteController;
 use App\Http\Controllers\Report\ReportController;
@@ -12,13 +13,18 @@ Route::get('/', function () {
 
 Route::group(['prefix' => 'v1'], function () {
     Route::group(['prefix' => 'auth'], function () {
-        Route::get('/register', [UserController::class, 'register']);
+        Route::post('/register', [AuthController::class, 'register']);
+        Route::post('/login', [AuthController::class, 'login']);
     });
 
     Route::group(['prefix' => 'websites'], function () {
-        Route::resource('/', WebsiteController::class);
+        // Route::resource('/', [WebsiteController::class, '']);
+        Route::get('/', [WebsiteController::class, 'index']);
+        Route::get('/{id}/report', [WebsiteController::class, 'showReport']);
+
+        // Route::middleware('auth:api')->get('/websites/{id}/report', [WebsiteReportController::class, 'show']);
     });
-    
+
 
     Route::middleware('auth:api')->get('/report', [ReportController::class, 'show']);
     
