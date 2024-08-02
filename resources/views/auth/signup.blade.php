@@ -55,7 +55,7 @@
 
                             <div>
                                 <p class="mb-0">Do you have an account? <a href="{{ route('signin') }}"
-                                        class="text-white-50 fw-bold">Sign Up</a>
+                                        class="text-white-50 fw-bold">Sign In</a>
                                 </p>
                             </div>
 
