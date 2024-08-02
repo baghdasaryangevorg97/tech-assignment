@@ -16,12 +16,14 @@ class ReportRepository implements ReportRepositoryInterface
 
     public function getReportsByDate()
     {
-        return Report::select([
-            'date',
-            'revenue',
-            'impressions',
-            DB::raw('(revenue * 1000 / NULLIF(impressions, 0)) as cpm')
-        ])
+        return DB::table('reports')
+            ->select(
+                'date',
+                DB::raw('SUM(revenue) as revenue'),
+                DB::raw('SUM(impressions) as impressions'),
+                DB::raw('SUM(revenue) * 1000 / SUM(impressions) as cpm')
+            )
+            ->groupBy('date')
             ->get();
     }
 

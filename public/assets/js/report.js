@@ -22,7 +22,7 @@ $(function () {
 
     function loadData() {
         $.ajax({
-            url: '/api/v1/report/',
+            url: '/api/v1/report',
             method: 'GET',
             headers: {
                 'Authorization': 'Bearer ' + authToken
