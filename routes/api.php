@@ -32,6 +32,8 @@ Route::group(['prefix' => 'v1'], function () {
 
         Route::group(['prefix' => 'report'], function () {
             Route::get('/', [ReportController::class, 'index']);
+            Route::get('/getAll', [ReportController::class, 'getAll']);
+            Route::post('/add', [ReportController::class, 'store']);
         });
 
     });

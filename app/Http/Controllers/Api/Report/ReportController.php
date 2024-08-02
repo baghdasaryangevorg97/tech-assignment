@@ -3,19 +3,50 @@
 namespace App\Http\Controllers\Api\Report;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\AddReportRequest;
+use App\Http\Resources\ReportResource;
 use App\Models\Report;
+use App\Services\ReportService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class ReportController extends Controller
 {
+    protected $reportService;
 
+    public function __construct(ReportService $reportService)
+    {
+        $this->reportService = $reportService;
+    }
     public function index()
+    {
+        $data = $this->reportService->index();
+
+        return  response()->json($data);
+    }
+
+    public function getAll()
     {
         $reports = Report::all();
 
-        return response()->json($reports);
+        return  ReportResource::collection($reports);
     }
+
+
+    public function store(AddReportRequest $request)
+    {
+        $date = $request->date;
+        $website_id = $request->website_id;
+
+        if(!Report::where('date', $date)->where('website_id', $website_id)->exists()) {
+            $report = Report::create($request->all());
+    
+            return new ReportResource($report);
+        } 
+
+        return response()->json(['message' => 'Report already exists'], 409);
+    }
+
+   
 
     // public function show(Request $request)
     // {

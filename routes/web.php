@@ -15,7 +15,7 @@ Route::group(['prefix' => 'auth'], function () {
 });
 
 Route::group(['prefix' => 'websites'], function () {
-    Route::get('/', [WebsiteController::class, 'index']);
+    Route::get('/', [WebsiteController::class, 'index'])->name('websites');
 });
 
 Route::group(['prefix' => 'report'], function () {
