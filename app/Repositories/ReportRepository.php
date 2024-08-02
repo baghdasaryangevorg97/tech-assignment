@@ -11,6 +11,11 @@ class ReportRepository implements ReportRepositoryInterface
 {
     public function getAllReports()
     {
+        return Report::all();
+    }
+
+    public function getReportsByDate()
+    {
         return Report::select([
                 'date',
                 'revenue',
@@ -20,27 +25,16 @@ class ReportRepository implements ReportRepositoryInterface
             ->get();
     }
 
-    public function getReportById($id)
-    {
-        return Report::findOrFail($id);
-    }
-
     public function createReport(array $data)
     {
         return Report::create($data);
     }
 
-    public function updateReport($id, array $data)
+    public function reportExistsByDateAndWebsiteId($date, $website_id)
     {
-        $report = Report::findOrFail($id);
-        $report->update($data);
-        return $report;
+        return Report::where('date', $date)
+            ->where('website_id', $website_id)
+            ->exists();
     }
 
-    public function deleteReport($id)
-    {
-        $report = Report::findOrFail($id);
-        $report->delete();
-        return $report;
-    }
 }

@@ -3,12 +3,14 @@
 namespace App\Contracts;
 
 use App\Models\Report;
+use Carbon\Carbon;
 
 interface ReportRepositoryInterface
 {
     public function getAllReports();
-    public function getReportById($id);
+    public function getReportsByDate();
     public function createReport(array $data);
-    public function updateReport($id, array $data);
-    public function deleteReport($id);
+
+    public function reportExistsByDateAndWebsiteId(Carbon $date, int $website_id);
+    
 }

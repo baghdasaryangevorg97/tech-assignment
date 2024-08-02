@@ -1,17 +1,15 @@
 <?php
 
 use App\Http\Controllers\Api\Website\WebsiteController;
-use App\Http\Controllers\Auth\AuthController;
-use App\Http\Controllers\User\UserController;
+use App\Http\Controllers\Api\Auth\AuthController;
 use App\Http\Controllers\Api\Report\ReportController;
 use Illuminate\Support\Facades\Route;
 
 
 Route::get('/check-auth', [AuthController::class, 'checkAuth']);
 
-
-
 Route::group(['prefix' => 'v1'], function () {
+
     Route::group(['prefix' => 'auth'], function () {
         Route::post('/register', [AuthController::class, 'register']);
         Route::post('/login', [AuthController::class, 'login']);
@@ -24,10 +22,6 @@ Route::group(['prefix' => 'v1'], function () {
             Route::post('/add', [WebsiteController::class, 'store']);
             Route::put('/edit/{id}', [WebsiteController::class, 'edit']);
             Route::delete('/destroy/{id}', [WebsiteController::class, 'destroy']);
-            
-            // Route::get('/{id}/report', [WebsiteController::class, 'showReport']);
-
-            // Route::middleware('auth:api')->get('/websites/{id}/report', [WebsiteReportController::class, 'show']);
         });
 
         Route::group(['prefix' => 'report'], function () {
@@ -37,10 +31,6 @@ Route::group(['prefix' => 'v1'], function () {
         });
 
     });
-
-
-
-
 
 });
 

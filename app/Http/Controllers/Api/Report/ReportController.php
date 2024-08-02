@@ -7,7 +7,6 @@ use App\Http\Requests\AddReportRequest;
 use App\Http\Resources\ReportResource;
 use App\Models\Report;
 use App\Services\ReportService;
-use Illuminate\Http\Request;
 
 class ReportController extends Controller
 {
@@ -26,7 +25,7 @@ class ReportController extends Controller
 
     public function getAll()
     {
-        $reports = Report::all();
+        $reports = $this->reportService->getAll();
 
         return  ReportResource::collection($reports);
     }
@@ -34,16 +33,14 @@ class ReportController extends Controller
 
     public function store(AddReportRequest $request)
     {
-        $date = $request->date;
-        $website_id = $request->website_id;
 
-        if(!Report::where('date', $date)->where('website_id', $website_id)->exists()) {
-            $report = Report::create($request->all());
-    
-            return new ReportResource($report);
-        } 
+        $result = $this->reportService->createReport($request->all());
+        
+        if (isset($result['error'])) {
+            return response()->json(['error' => $result['error']], 409);
+        }
 
-        return response()->json(['message' => 'Report already exists'], 409);
+        return response()->json(['message' => 'Report created successfully'], 201);
     }
 
    

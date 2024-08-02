@@ -1,10 +1,8 @@
 <?php
 
-namespace App\Http\Controllers\Report;
+namespace App\Http\Controllers\Web\Report;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class ReportController extends Controller
 {

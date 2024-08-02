@@ -1,11 +1,8 @@
 <?php
 
-namespace App\Http\Controllers\Website;
+namespace App\Http\Controllers\Web\Website;
 
 use App\Http\Controllers\Controller;
-use App\Models\Website;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 
 class WebsiteController extends Controller

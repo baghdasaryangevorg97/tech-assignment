@@ -1,8 +1,8 @@
 <?php
 
-use App\Http\Controllers\Auth\AuthController;
-use App\Http\Controllers\Report\ReportController;
-use App\Http\Controllers\Website\WebsiteController;
+use App\Http\Controllers\Web\Auth\AuthController;
+use App\Http\Controllers\Web\Report\ReportController;
+use App\Http\Controllers\Web\Website\WebsiteController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {

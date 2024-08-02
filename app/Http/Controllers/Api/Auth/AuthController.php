@@ -1,13 +1,11 @@
 <?php
 
-namespace App\Http\Controllers\Auth;
+namespace App\Http\Controllers\Api\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\SigninRequest;
 use App\Http\Requests\SignupRequest;
 use App\Services\AuthService;
-use Illuminate\Auth\AuthenticationException;
-use Illuminate\Http\Request;
 
 class AuthController extends Controller
 {
@@ -17,16 +15,6 @@ class AuthController extends Controller
     public function __construct(AuthService $authService)
     {
         $this->authService = $authService;
-    }
-
-    public function showLoginForm()
-    {
-        return view('auth.signin');
-    }
-
-    public function showSignupForm()
-    {
-        return view('auth.signup');
     }
 
     public function register(SignupRequest $request)
