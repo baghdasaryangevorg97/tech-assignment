@@ -12,7 +12,8 @@ $(function () {
             type: 'POST',
             data: $(this).serialize(),
             success: function (response) {
-                alert(response.message);
+                localStorage.setItem('auth_token', response.token);
+                window.location.href = '/websites';
             },
             error: function(jqXHR, textStatus, errorThrown) {
                 if(jqXHR.status == '422'){
@@ -45,6 +46,7 @@ $(function () {
             success: function (response) {
                 console.log(response, "responsee");
                 localStorage.setItem('auth_token', response.token);
+                window.location.href = '/websites';
             },
             error: function(jqXHR) {
                 var errors = jqXHR.responseJSON.errors;

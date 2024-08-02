@@ -42,24 +42,16 @@ class AuthController extends Controller
 
     public function login(SigninRequest $request)
     {
-        try {
-            $result = $this->authService->login($request->validated());
 
-            return response()->json([
-                'message' => 'User logged in successfully',
-                'user' => $result['user'],
-                'token' => $result['token']
-            ], 200);
-        } catch (AuthenticationException $e) {
-            return response()->json([
-                'message' => 'The provided credentials are incorrect.',
-                'error' => $e->getMessage()
-            ], 401);
-        } catch (\Exception $e) {
-            return response()->json([
-                'message' => 'An unexpected error occurred',
-                'error' => $e->getMessage()
-            ], 500);
+        if (!auth()->attempt($request->only('email', 'password'))) {
+            return response()->json(['message' => 'Invalid credentials'], 401);
         }
+
+        $result = $this->authService->login($request->validated());
+
+        return response()->json([
+            'token' => $result['token']
+        ], 200);
+        
     }
 }

@@ -1,0 +1,78 @@
+#list-container {
+    padding: 60px 0;
+    margin-bottom: 20px;
+}
+
+.site-container {
+    padding-top: 20px;
+}
+
+.list-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+.list-item span {
+    flex: 1;
+    padding: 0 10px;
+}
+
+.list-item span:first-child {
+    flex: 0.1;
+}
+
+.list-item button {
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.edit-btn {
+    background-color: #4CAF50;
+    color: white;
+    margin-right: 10px;
+}
+
+.report-btn {
+    background-color: #30608c;
+    margin-left: 10px;
+}
+
+.report-btn a {
+    text-decoration: none;
+    color: white;
+}
+
+.delete-btn {
+    background-color: #f44336;
+    color: white;
+}
+
+#pagination-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.page-btn {
+    padding: 5px 10px;
+    margin: 0 5px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #fff;
+    cursor: pointer;
+}
+
+.page-btn.active, .page-btn:hover {
+    background-color: #007BFF;
+    color: white;
+    border-color: #007BFF;
+}
+

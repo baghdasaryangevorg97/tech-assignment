@@ -19,6 +19,8 @@ return new class extends Migration
             $table->integer('clicks');
             $table->date('date');
             $table->timestamps();
+
+            $table->unique(['website_id', 'date']);
         });
     }
 

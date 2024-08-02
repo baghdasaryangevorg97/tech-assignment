@@ -9,8 +9,6 @@ use Illuminate\Database\Eloquent\Factories\Factory;
  */
 class ReportFactory extends Factory
 {
-    protected $model = Report::class;
-
     /**
      * Define the model's default state.
      *
@@ -19,11 +17,17 @@ class ReportFactory extends Factory
     public function definition(): array
     {
         return [
-            'website_id' => $this->faker->numberBetween(1, 100),
             'revenue' => $this->faker->randomFloat(2, 0, 1000),
             'impressions' => $this->faker->numberBetween(1000, 100000),
             'clicks' => $this->faker->numberBetween(100, 10000),
-            'date' => $this->faker->dateTimeBetween('-1 month', 'now')->format('Y-m-d'),
         ];
+    }
+
+    public function withCustomData($websiteId, $date)
+    {
+        return $this->state([
+            'website_id' => $websiteId,
+            'date' => $date,
+        ]);
     }
 }
