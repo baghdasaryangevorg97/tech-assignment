@@ -8,6 +8,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="{{ asset('assets/js/website.js') }}"></script>
+    <script src="{{ asset('assets/js/main.js') }}"></script>
 </head>
 
 <body>
@@ -20,9 +21,14 @@
     </div>
 
     <div class="container site-container">
-        <div>
-            <button id="add-btn" class="btn btn-primary">Add New Item</button>
-            <button class="btn btn-primary"><a href="{{ route('report') }}" style="text-decoration: none; color: white;" >Report</a></button>
+        <div class="d-flex justify-content-between">
+            <div>
+                <button id="add-btn" class="btn btn-primary">Add New Item</button>
+                <button class="btn btn-primary"><a href="{{ route('report') }}" style="text-decoration: none; color: white;" >Report</a></button>
+            </div>
+            <div>
+                <button id="logout-btn" class="btn btn-primary">Logout</button>
+            </div>
         </div>
         <div id="list-container"></div>
         <div id="pagination-container"></div>

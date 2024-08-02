@@ -35,10 +35,10 @@ class AuthController extends Controller
             return response()->json(['message' => 'Invalid credentials'], 401);
         }
 
-        $result = $this->authService->login($request->validated());
+        $token = $this->authService->login($request->validated());
 
         return response()->json([
-            'token' => $result['token']
+            'token' => $token
         ], 200);
         
     }

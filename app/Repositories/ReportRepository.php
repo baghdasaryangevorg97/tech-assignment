@@ -17,11 +17,11 @@ class ReportRepository implements ReportRepositoryInterface
     public function getReportsByDate()
     {
         return Report::select([
-                'date',
-                'revenue',
-                'impressions',
-                DB::raw('(revenue * 1000 / NULLIF(impressions, 0)) as cpm')
-            ])
+            'date',
+            'revenue',
+            'impressions',
+            DB::raw('(revenue * 1000 / NULLIF(impressions, 0)) as cpm')
+        ])
             ->get();
     }
 
@@ -36,5 +36,18 @@ class ReportRepository implements ReportRepositoryInterface
             ->where('website_id', $website_id)
             ->exists();
     }
+
+    public function getReportByWebsiteId($id)
+    {
+        return Report::where('website_id', $id)->
+            select([
+                'date',
+                'revenue',
+                'impressions',
+                DB::raw('(revenue * 1000 / NULLIF(impressions, 0)) as cpm')
+            ])
+            ->get();
+    }
+
 
 }

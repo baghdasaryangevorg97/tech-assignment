@@ -8,6 +8,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="{{ asset('assets/js/report.js') }}"></script>
+    <script src="{{ asset('assets/js/main.js') }}"></script>
 </head>
 
 <body>
@@ -47,12 +48,17 @@
     </div>
 
     <div class="container site-container">
-        <div>
-            <button class="btn btn-primary"><a href="{{ route('websites') }}"
-                    style="text-decoration: none; color: white;">Websites</a></button>
-            <button id="add-new-report" class="btn btn-primary">Add New Report</button>
-            <button id="show-report-by-date" class="btn btn-primary">Show Report by date</button>
-            <button id="show-report" class="btn btn-primary">Show Report</button>
+        <div class="d-flex justify-content-between">
+            <div>
+                <button class="btn btn-primary"><a href="{{ route('websites') }}"
+                        style="text-decoration: none; color: white;">Websites</a></button>
+                <button id="show-report-by-date" class="btn btn-primary">Show Report by date</button>
+                <button id="show-report" class="btn btn-primary">Show Report</button>
+                <button id="add-new-report" class="btn btn-primary m-4">Add New Report</button>
+            </div>
+            <div>
+                <button id="logout-btn" class="btn btn-primary">Logout</button>
+            </div>
         </div>
         <div id="list-container"></div>
     </div>

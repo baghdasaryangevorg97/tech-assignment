@@ -4,118 +4,74 @@ namespace App\Http\Controllers\Api\Website;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CreateWebsiteRequest;
+use App\Http\Resources\ReportWebsiteResource;
+use App\Http\Resources\WebsiteResource;
 use App\Models\Report;
 use App\Models\Website;
+use App\Services\WebsiteService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 
 class WebsiteController extends Controller
 {
+
+    protected $websiteService;
+
+    public function __construct(WebsiteService $websiteService)
+    {
+        $this->websiteService = $websiteService;
+    }
+
     public function index()
     {
-        $websites = Website::paginate(20);
+        $websites = $this->websiteService->index();
 
-        return response()->json($websites);
+        return WebsiteResource::collection($websites);
+        
     }
 
     public function store(CreateWebsiteRequest $request)
     {
-        Website::create($request->all());
-        return response()->json(['success' => true]);
+        $created = $this->websiteService->create($request->all());
+
+        if($created){
+            return response()->json(['success' => true]);
+        }
+
+        return response()->json(['success' => false], 500);
     }
-
-    public function show(Website $website)
-    {
-        return view('content..show', compact('link'));
-    }
-
-    // public function showReport(int $id)
-    // {
-    //     $reports = Report::where('website_id', $id)->select('created_at', 'revenue', 'impressions', 'date')->get();
-    //     $data = $reports->keyBy('date');
-        
-    //     dd($data);
-    //     // $reports = DB::table('reports')
-    //     //     ->select(
-    //     //         DB::raw('DATE(created_at) as date'),
-    //     //         DB::raw('SUM(revenue) as revenue'),
-    //     //         DB::raw('SUM(impressions) as impressions'),
-    //     //         DB::raw('(SUM(revenue) * 1000 / SUM(impressions)) as cpm')
-    //     //     )
-    //     //     ->where('website_id', $id)
-    //     //     ->groupBy(DB::raw('DATE(created_at)'))
-    //     //     ->get();
-
-    //     $totalRevenue = $reports->sum('revenue');
-    //     $totalImpressions = $reports->sum('impressions');
-    //     $totalCpm = ($totalRevenue * 1000) / $totalImpressions;
-
-    //     $data = $reports->keyBy('date')->toArray();
-    //     $data['total'] = [
-    //         'sum' => $totalRevenue,
-    //         'impressions' => $totalImpressions,
-    //         'cpm' => $totalCpm
-    //     ];
-    //     dd($data, $id);
-    //     return response()->json(['data' => $data]);
-    // }
 
     public function showReport(int $id)
     {
-        $reports = Report::where('website_id', $id)->
-        select([
-            'date',
-            'revenue',
-            'impressions',
-            DB::raw('(revenue * 1000 / NULLIF(impressions, 0)) as cpm')
-        ])
-        ->get();
-
-        $data = $reports->keyBy('date');
-        $totalRevenue = $reports->sum('revenue');
-        $totalImpressions = $reports->sum('impressions');
-        $totalCpm = $totalImpressions > 0 ? ($totalRevenue * 1000) / $totalImpressions : 0;
-
-        $data = $reports->keyBy('date')->toArray();
-        $total = [
-            'sum' => $totalRevenue,
-            'impressions' => $totalImpressions,
-            'cpm' => $totalCpm
-        ];
+        $reports = $this->websiteService->showReport($id);
         
-        return response()->json(['data' => $data, 'total' => $total]);
+        return new ReportWebsiteResource($reports);
     }
-
-    // public function websites(Website $website)
-    // {
-    //     return view('links.show', compact('link'));
-    // }
 
     public function edit($id, Request $request)
-    {
-        Website::where('id', $id)->update(['url' => $request->url]);
-        return response()->json(['success' => true]);
-    }
-
-    public function update(Request $request, Website $website)
     {
         $request->validate([
             'url' => 'required|url',
         ]);
 
-        $website->update($request->all());
-        return redirect()->route('links.index');
+        $data = $this->websiteService->edit($id, $request->url);
+
+        if($data){
+            return response()->json(['success' => true]);
+        }
+
+        return response()->json(['success' => false], 500);
     }
 
     public function destroy($id)
     {
-        $website = Website::find($id);
+        $delete = $this->websiteService->destroy($id);
 
-        if ($website->delete()) {
+        if ($delete) {
             return response()->json(['success' => true]);
         }
-        return response()->json(['success' => false]);
+        return response()->json(['success' => false], 500);
     }
 
 }

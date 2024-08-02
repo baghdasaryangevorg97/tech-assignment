@@ -48,4 +48,9 @@ class ReportService
         return ['error' => 'Report already exists'];
     }
 
+    public function getReportByWebsiteId(int $id)
+    {
+        return $this->reportRepository->getReportByWebsiteId($id);
+    }
+
 }

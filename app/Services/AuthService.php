@@ -17,20 +17,17 @@ class AuthService
             'password' => Hash::make($data['password']),
         ]);
 
-        $token =  $user->createToken('auth_token')->plainTextToken;
+        $token = $user->createToken('auth_token')->plainTextToken;
 
         return $token;
     }
 
-    public function login(array $data): object|array
+    public function login(array $data): string
     {
-        if (Auth::attempt(['email' => $data['email'], 'password' => $data['password']])) {
-            $user = Auth::user();
-            $token = $user->createToken('auth_token')->plainTextToken;
+        $user = Auth::user();
+        $token = $user->createToken('auth_token')->plainTextToken;
 
-            return ['user' => $user, 'token' => $token];
-        }
+        return $token;
 
-        throw new AuthenticationException('The provided credentials are incorrect.');
     }
 }

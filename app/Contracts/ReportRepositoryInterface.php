@@ -12,5 +12,7 @@ interface ReportRepositoryInterface
     public function createReport(array $data);
 
     public function reportExistsByDateAndWebsiteId(Carbon $date, int $website_id);
+
+    public function getReportByWebsiteId(int $id);
     
 }

@@ -45,6 +45,7 @@ $(function () {
         listContainer.empty();
 
         data.forEach(function (item) {
+
             var listItem = `
                 <div class="list-item" data-id="${item.id}">
                     <span><strong>${item.id}</strong></span>
@@ -69,19 +70,17 @@ $(function () {
 
         var paginationHtml = '';
 
-        if (pagination.prev_page_url) {
-            paginationHtml += `<button class="page-btn" data-page="${pagination.current_page - 1}">Previous</button>`;
-        }
-
-        pagination.links.forEach(function (link) {
+        let paginationLinks = pagination.meta.links;
+        
+        paginationLinks.forEach(function (link) {
             if (link.url) {
-                paginationHtml += `<button class="page-btn ${link.active ? 'active' : ''}" data-page="${link.label}">${link.label}</button>`;
+                console.log(link.label != "Next &raquo");
+                console.log(link.label);
+                if (link.label !== "Next &raquo;" && link.label !== "&laquo; Previous") {
+                    paginationHtml += `<button class="page-btn ${link.active ? 'active' : ''}" data-page="${link.label}">${link.label}</button>`;
+                }
             }
         });
-
-        if (pagination.next_page_url) {
-            paginationHtml += `<button class="page-btn" data-page="${pagination.current_page + 1}">Next</button>`;
-        }
 
         paginationContainer.html(paginationHtml);
 
