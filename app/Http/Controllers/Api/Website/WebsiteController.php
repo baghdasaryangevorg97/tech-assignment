@@ -36,7 +36,7 @@ class WebsiteController extends Controller
         $created = $this->websiteService->create($request->all());
 
         if($created){
-            return response()->json(['success' => true]);
+            return response()->json(['success' => true], 201);
         }
 
         return response()->json(['success' => false], 500);

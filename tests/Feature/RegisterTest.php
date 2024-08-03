@@ -11,35 +11,72 @@ class RegisterTest extends TestCase
     use RefreshDatabase;
 
     /** @test */
-    public function a_user_can_register()
+    public function test_user_can_register()
     {
-        $response = $this->post('/register', [
+        $response = $this->postJson('/api/v1/auth/register', [
             'name' => 'Test User',
             'email' => 'test@example.com',
-            'password' => 'password123',
-            'password_confirmation' => 'password123',
+            'password' => 'qwerty123456!',
+            'password_confirmation' => 'qwerty123456!',
         ]);
 
-        $response->assertStatus(302);
-        $this->assertDatabaseHas('users', [
-            'email' => 'test@example.com',
-        ]);
-        $this->assertAuthenticated();
+        $response->assertStatus(201)
+            ->assertJson([
+                'message' => 'User registered successfully',
+            ])
+            ->assertJsonStructure([
+                'token'
+            ]);
     }
 
     /** @test */
-    public function a_user_cannot_register_with_existing_email()
+    public function test_user_cannot_register_with_missing_fields()
     {
-        $user = User::factory()->create();
-
-        $response = $this->post('/register', [
-            'name' => 'Test User',
-            'email' => $user->email,
-            'password' => 'password123',
-            'password_confirmation' => 'password123',
+        $response = $this->postJson('/api/v1/auth/register', [
+            'name' => '',
+            'email' => '',
+            'password' => '',
+            'password_confirmation' => '',
         ]);
 
-        $response->assertStatus(422);
-        $this->assertGuest();
+        $response->assertStatus(422)
+                 ->assertJsonValidationErrors(['email', 'password']);
+    }
+
+    /** @test */
+    public function test_user_cannot_register_with_mismatched_password_confirmation()
+    {
+        $response = $this->postJson('/api/v1/auth/register', [
+            'name' => 'Test User',
+            'email' => 'test@example.com',
+            'password' => 'qwerty123456!',
+            'password_confirmation' => 'different_password',
+        ]);
+
+        $response->assertStatus(422)
+                 ->assertJson([
+                     'message' => 'The password confirmation field must match password.',
+                 ]);
+    }
+
+    /** @test */
+    public function test_user_cannot_register_with_existing_email()
+    {
+        User::factory()->create([
+            'email' => 'test@example.com',
+            'password' => 'qwerty123456!',
+        ]);
+
+        $response = $this->postJson('/api/v1/auth/register', [
+            'name' => 'Test User',
+            'email' => 'test@example.com',
+            'password' => 'qwerty123456!!!',
+            'password_confirmation' => 'qwerty123456!!!',
+        ]);
+
+        $response->assertStatus(422)
+                 ->assertJson([
+                     'message' => 'The email has already been taken.',
+                 ]);
     }
 }
